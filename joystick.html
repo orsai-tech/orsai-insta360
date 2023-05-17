@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camera Control</title>
+  <!-- Include Tailwind CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="flex items-center justify-center min-h-screen">
+  <div id="joyDiv" class="relative"></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.10.1/dist/nipplejs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+  <script>
+    // Initialize NippleJS
+    var manager = nipplejs.create({
+      zone: document.getElementById('joyDiv'),
+      mode: 'static',
+      position: { left: '50%', top: '50%' },
+      color: 'blue',
+    });
+
+    const movementConstant = 0.1;
+
+    // Mapping joystick position to pan-tilt range
+    var panTiltRange = 648000;
+    var joystickRange = 100; // Assuming the joystick range is -100 to 100
+
+    // Constants for controlling the speed
+    var maxSpeedFactor = 100; // Adjust this to increase/decrease the maximum speed
+
+    // Variable to store the interval ID for continuous movement
+    var continuousMovementInterval;
+
+    // Function to calculate pan-tilt based on joystick movement
+    function calculatePanTilt(evt, data) {
+        if(!data.direction){
+            return;
+        }
+  var directionX = data.direction.x;
+  var directionY = data.direction.y;
+  var force = data.force;
+
+  // Adjust the speed based on the force and movement constant
+  var speedFactor = 1 + (force * movementConstant);
+
+  // Calculate pan and tilt values based on the direction and speed factor
+  var pan, tilt;
+
+  if (directionX === 'left') {
+    // Move to the leftmost position
+    pan = Math.floor(-panTiltRange / 2 * speedFactor);
+  } else if (directionX === 'right') {
+    // Move to the rightmost position
+    pan = Math.floor(panTiltRange / 2 * speedFactor);
+  } else {
+    // No horizontal movement
+    pan = 0;
+  }
+
+  if (directionY === 'up') {
+    // Move to the highest position
+    tilt = Math.floor(panTiltRange / 2 * speedFactor);
+  } else if (directionY === 'down') {
+    // Move to the lowest position
+    tilt = Math.floor(-panTiltRange / 2 * speedFactor);
+  } else {
+    // No vertical movement
+    tilt = 0;
+  }
+
+  // Construct the command object
+  var command = {
+    type: 'pan_tilt',
+    pan: pan,
+    tilt: tilt,
+  };
+
+  // Send the command to the server using sockets
+  socket.emit('executeCommand', command);
+}
+
+    // Example function to handle the server response (replace with your own code)
+    function handleServerResponse(response) {
+      console.log('Server response:', response);
+      // Handle the server response here
+    }
+
+    // Connect to the server via socket.io
+    var socket = io();
+
+    // Event listener for joystick movement
+    manager.on('move', calculatePanTilt);
+
+    // Socket event listener for server response
+    socket.on('serverResponse', handleServerResponse);
+  </script></body>
+
+</html>
+
