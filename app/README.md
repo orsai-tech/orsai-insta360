@@ -43,9 +43,17 @@ La versión actual del software fue desarrollada para una Raspberry Pi 4 B (2GB)
 
 🚀 **Getting started**
 
-* Clonar repositorio
+* Clonar repositorio.
 ``` bash
     git clone https://github.com/orsai-tech/orsai-insta360.git
+```
+* 
+``` bash
+    cd app
+    python3 -m venv env
+    source env/bin/activate
+    pip install -r requirements.txt
+    python3 app.py
 ```
 
 ## 🪜 **Características del release**
