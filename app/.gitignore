@@ -1,0 +1,40 @@
+# Entornos virtuales
+venv/
+env/
+
+# Archivos de registro
+*.log
+
+# Archivos de configuración
+instance/
+
+# Dependencias
+/lib/
+/pycache/
+__pycache__/
+
+# Archivos generados
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+*.egg-info/
+dist/
+build/
+
+# Entorno de desarrollo
+.env
+
+# Entorno de producción
+.env.prod
+
+# Archivos IDE
+.vscode/
+.idea/
+
+# Otros
+*.pyc
+*.swp
+*~
+.DS_Store
