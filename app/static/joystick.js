@@ -199,7 +199,10 @@ $(document).ready(function() {
             error: function(error) {
                 console.error("Error sending joystick position:", error);
             }
-        });
+        }); 
+        setTimeout(() => {
+            console.log("1 Segundo esperando")
+        }, 4000);
     }
     
     // Llama a la función sendJoystickPosition repetidamente para actualizar la posición del joystick en el servidor cada 100ms
