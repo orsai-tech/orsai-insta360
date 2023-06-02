@@ -4,7 +4,9 @@ import subprocess
 app = Flask(__name__, template_folder='template', static_folder='static')
 
 #Global variables
-sensibility = 5
+sensibility = 10
+pan_abs = 0
+tilt_abs = 0
 
 @app.route("/")
 def index():
@@ -18,8 +20,10 @@ def index():
     """
 
     dropdown_options = ["Option 12", "Option 2", "Option 3"]
+
     
-    return render_template('index.html', dropdown_options=dropdown_options)
+    return render_template('index.html', dropdown_options=dropdown_options, pan_abs=pan_abs, tilt_abs=tilt_abs)
+
 
 @app.route('/update', methods=['POST'])
 def update():
@@ -38,12 +42,14 @@ def update():
     
     #Mapeo: EL joystick tiene va 50 a 170, con pasos de a 1, en cada eje. 
     #El eje X en los enteros y el Y siempre con .125 de decimal (excepto en los extremos)
-    #pan_absolute y tilt_absolute van de -648000 a 648000 de pasos de a 3600 (359 estados) 
+    #pan_absolute y tilt_absolute van de -648000 a 648000 de pasos de a 3600 (359 estados)
+
     
     move_pan  = (x - 110)/60 * sensibility * 3600
     move_tilt = -1* (y - 110)/60 * sensibility * 3600
-
+    
     pan_abs, tilt_abs = get_camera()
+    
     
     if pan_abs + move_pan > 600000:
         move_pan = 600000 - pan_abs
@@ -105,6 +111,7 @@ def update_slider():
     
     global sensibility
     sensibility = float(request.form.get('value'))/10
+
     # Puedes devolver una respuesta al cliente si es necesario
     
     return 'OK'
@@ -121,28 +128,63 @@ def move_camera(pan, tilt):
         tilt_abs (int): Valor absoluto de posición de tilteo (Eje vertical)
     """
     
-    command = f"v4l2-ctl -d /dev/video0 --set-ctrl=pan_absolute={pan} --set-ctrl=tilt_absolute={tilt}"
-    subprocess.run(command, shell=True)
-    
+    command = f"v4l2-ctl -d /dev/vidoe0 --set-ctrl=pan_absolute={pan} --set-ctrl=tilt_absolute={tilt}"
+    subprocess.run(
+        command, shell=True
+    )  # Replace with the appropriate command for your camera control
+
 def get_camera():
     """
     Función para obtener la posición de la cámara.
-    
-    Obtiene los valores de pan y tilt absolutos en los que se encuentra la cámara utilizando el comando "command"
+     
+    Obtiene los valores de pan y tilt absolutos en los que se encuentra la cámara utilizando el comando "command".
     
     Return:
         pan_abs (int): Valor absoluto de posición de paneo (Eje horizontal)
         tilt_abs (int): Valor absoluto de posición de tilteo (Eje vertical)
     """
-    command = f"v4l2-ctl -d /dev/video0 --get-ctrl=pan_absolute --get-ctrl=tilt_absolute"
-    proc = subprocess.run(command, shell=True, capture_output = True)
+    command = f"v4l2-ctl -d /dev/vidoe0 --get-ctrl=pan_absolute --get-ctrl=tilt_absolute"
+    proc = subprocess.run(
+        command, shell=True
+    )  # Replace with the appropriate command for your camera control
     
     proc_output = proc.stdout.splitlines()
     
     pan_abs = int(proc_output[0][14:])
     tilt_abs = int(proc_output[1][15:])
-    
+
     return pan_abs, tilt_abs
+
+@app.route('/save_button_click', methods=['POST'])
+def save_scene():
+    """
+    Ruta para realizar una acción al presionar el botón save.
+
+    Guarda los valores de posición actuales en la escena correspondiente.
+
+    Returns:
+        jsonify: Respuesta JSON con un indicador de éxito.
+    """
+    
+    print('Scene saved!')
+    
+    return jsonify(success=True) 
+
+@app.route('load_button_click', methods=['POST'])
+def load_scene():
+    """
+    Ruta para realizar una acción al presionar el botón load.
+
+    Carga los valores de posición de la escena correspondiente.
+
+    Returns:
+        jsonify: Respuesta JSON con un indicador de éxito.
+    """
+    
+    print('Scene loaded!')
+
+    return jsonify(success=True)
+
 
 if __name__ == '__main__':
     """

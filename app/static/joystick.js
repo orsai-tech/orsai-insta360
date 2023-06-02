@@ -72,6 +72,38 @@ $(document).ready(function() {
         });
     });
 
+    // Manejar el evento de clic en el botón "SAVE"
+    $("#saveButton").click(function() {
+        $.ajax({
+            url: "/save_button_click",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(response) {
+                console.log("Button click sent successfully.");
+            },
+            error: function(error) {
+                console.error("Error sending button click:", error);
+            }
+        });
+    });
+
+    // Manejar el evento de clic en el botón "SAVE"
+    $("#loadButton").click(function() {
+        $.ajax({
+            url: "/load_button_click",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(response) {
+                console.log("Button click sent successfully.");
+            },
+            error: function(error) {
+                console.error("Error sending button click:", error);
+            }
+        });
+    });
+
     // Manejar el cambio de selección en la lista desplegable
     $("#myDropdown").change(function() {
         var selectedOption = $(this).val();
@@ -200,9 +232,6 @@ $(document).ready(function() {
                 console.error("Error sending joystick position:", error);
             }
         }); 
-        setTimeout(() => {
-            console.log("1 Segundo esperando")
-        }, 4000);
     }
     
     // Llama a la función sendJoystickPosition repetidamente para actualizar la posición del joystick en el servidor cada 100ms
