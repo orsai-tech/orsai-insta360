@@ -7,6 +7,7 @@ app = Flask(__name__, template_folder='template', static_folder='static')
 sensibility = 10
 pan_abs = 0
 tilt_abs = 0
+dropdown_options = ["Option 12", "Option 2", "Option 3"]
 
 @app.route("/")
 def index():
@@ -19,10 +20,8 @@ def index():
         render_template: Plantilla 'index.html' con las opciones para el menú desplegable.
     """
 
-    dropdown_options = ["Option 12", "Option 2", "Option 3"]
-
     
-    return render_template('index.html', dropdown_options=dropdown_options, pan_abs=pan_abs, tilt_abs=tilt_abs)
+    return render_template('index.html', dropdown_options=dropdown_options, pan_abs=pan_abs, tilt_abs=tilt_abs, button_count=0)
 
 
 @app.route('/update', methods=['POST'])
@@ -165,12 +164,14 @@ def save_scene():
     Returns:
         jsonify: Respuesta JSON con un indicador de éxito.
     """
+    global pan_1, tilt_1
+    pan_1, tilt_1 = get_camera()
     
     print('Scene saved!')
     
     return jsonify(success=True) 
 
-@app.route('load_button_click', methods=['POST'])
+@app.route('/load_button_click', methods=['POST'])
 def load_scene():
     """
     Ruta para realizar una acción al presionar el botón load.
@@ -180,7 +181,7 @@ def load_scene():
     Returns:
         jsonify: Respuesta JSON con un indicador de éxito.
     """
-    
+    move_camera(pan_1, tilt_1)
     print('Scene loaded!')
 
     return jsonify(success=True)

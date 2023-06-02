@@ -73,7 +73,7 @@ $(document).ready(function() {
     });
 
     // Manejar el evento de clic en el botón "SAVE"
-    $("#saveButton").click(function() {
+    $("#Save1").click(function() {
         $.ajax({
             url: "/save_button_click",
             type: "POST",
@@ -89,7 +89,7 @@ $(document).ready(function() {
     });
 
     // Manejar el evento de clic en el botón "SAVE"
-    $("#loadButton").click(function() {
+    $("#Escena1").click(function() {
         $.ajax({
             url: "/load_button_click",
             type: "POST",
@@ -231,7 +231,7 @@ $(document).ready(function() {
             error: function(error) {
                 console.error("Error sending joystick position:", error);
             }
-        }); 
+        });
     }
     
     // Llama a la función sendJoystickPosition repetidamente para actualizar la posición del joystick en el servidor cada 100ms
