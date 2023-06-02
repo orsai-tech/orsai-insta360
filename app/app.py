@@ -19,9 +19,8 @@ def index():
     Returns:
         render_template: Plantilla 'index.html' con las opciones para el menú desplegable.
     """
-
     
-    return render_template('index.html', dropdown_options=dropdown_options, pan_abs=pan_abs, tilt_abs=tilt_abs, button_count=0)
+    return render_template('index.html', dropdown_options=dropdown_options, pan_abs=pan_abs, tilt_abs=tilt_abs)
 
 
 @app.route('/update', methods=['POST'])
@@ -47,6 +46,7 @@ def update():
     move_pan  = (x - 110)/60 * sensibility * 3600
     move_tilt = -1* (y - 110)/60 * sensibility * 3600
     
+    global pan_abs, tilt_abs
     pan_abs, tilt_abs = get_camera()
     
     
@@ -127,7 +127,7 @@ def move_camera(pan, tilt):
         tilt_abs (int): Valor absoluto de posición de tilteo (Eje vertical)
     """
     
-    command = f"v4l2-ctl -d /dev/vidoe0 --set-ctrl=pan_absolute={pan} --set-ctrl=tilt_absolute={tilt}"
+    command = f"v4l2-ctl -d /dev/video0 --set-ctrl=pan_absolute={pan} --set-ctrl=tilt_absolute={tilt}"
     subprocess.run(
         command, shell=True
     )  # Replace with the appropriate command for your camera control
@@ -142,20 +142,20 @@ def get_camera():
         pan_abs (int): Valor absoluto de posición de paneo (Eje horizontal)
         tilt_abs (int): Valor absoluto de posición de tilteo (Eje vertical)
     """
-    command = f"v4l2-ctl -d /dev/vidoe0 --get-ctrl=pan_absolute --get-ctrl=tilt_absolute"
+    command = f"v4l2-ctl -d /dev/video0 --get-ctrl=pan_absolute --get-ctrl=tilt_absolute"
     proc = subprocess.run(
-        command, shell=True
+        command, shell=True, capture_output=True
     )  # Replace with the appropriate command for your camera control
     
     proc_output = proc.stdout.splitlines()
-    
+    global pan_abs, tilt_abs
     pan_abs = int(proc_output[0][14:])
     tilt_abs = int(proc_output[1][15:])
 
     return pan_abs, tilt_abs
 
-@app.route('/save_button_click', methods=['POST'])
-def save_scene():
+@app.route('/save_button_click1', methods=['POST'])
+def save_scene1():
     """
     Ruta para realizar una acción al presionar el botón save.
 
@@ -167,12 +167,12 @@ def save_scene():
     global pan_1, tilt_1
     pan_1, tilt_1 = get_camera()
     
-    print('Scene saved!')
+    print('Scene 1 saved!')
     
     return jsonify(success=True) 
 
-@app.route('/load_button_click', methods=['POST'])
-def load_scene():
+@app.route('/load_button_click1', methods=['POST'])
+def load_scene1():
     """
     Ruta para realizar una acción al presionar el botón load.
 
@@ -182,10 +182,41 @@ def load_scene():
         jsonify: Respuesta JSON con un indicador de éxito.
     """
     move_camera(pan_1, tilt_1)
-    print('Scene loaded!')
+    print('Scene 1 loaded!')
 
     return jsonify(success=True)
 
+@app.route('/save_button_click2', methods=['POST'])
+def save_scene2():
+    """
+    Ruta para realizar una acción al presionar el botón save.
+
+    Guarda los valores de posición actuales en la escena correspondiente.
+
+    Returns:
+        jsonify: Respuesta JSON con un indicador de éxito.
+    """
+    global pan_2, tilt_2
+    pan_2, tilt_2 = get_camera()
+    
+    print('Scene 2 saved!')
+    
+    return jsonify(success=True) 
+
+@app.route('/load_button_click2', methods=['POST'])
+def load_scene2():
+    """
+    Ruta para realizar una acción al presionar el botón load.
+
+    Carga los valores de posición de la escena correspondiente.
+
+    Returns:
+        jsonify: Respuesta JSON con un indicador de éxito.
+    """
+    move_camera(pan_2, tilt_2)
+    print('Scene 2 loaded!')
+
+    return jsonify(success=True)
 
 if __name__ == '__main__':
     """

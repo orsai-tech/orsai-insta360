@@ -75,7 +75,7 @@ $(document).ready(function() {
     // Manejar el evento de clic en el botón "SAVE"
     $("#Save1").click(function() {
         $.ajax({
-            url: "/save_button_click",
+            url: "/save_button_click1",
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -91,7 +91,7 @@ $(document).ready(function() {
     // Manejar el evento de clic en el botón "SAVE"
     $("#Escena1").click(function() {
         $.ajax({
-            url: "/load_button_click",
+            url: "/load_button_click1",
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -103,6 +103,39 @@ $(document).ready(function() {
             }
         });
     });
+
+    // Manejar el evento de clic en el botón "SAVE"
+    $("#Save2").click(function() {
+        $.ajax({
+            url: "/save_button_click2",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(response) {
+                console.log("Button click sent successfully.");
+            },
+            error: function(error) {
+                console.error("Error sending button click:", error);
+            }
+        });
+    });
+
+    // Manejar el evento de clic en el botón "SAVE"
+    $("#Escena2").click(function() {
+        $.ajax({
+            url: "/load_button_click2",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(response) {
+                console.log("Button click sent successfully.");
+            },
+            error: function(error) {
+                console.error("Error sending button click:", error);
+            }
+        });
+    });
+
 
     // Manejar el cambio de selección en la lista desplegable
     $("#myDropdown").change(function() {
