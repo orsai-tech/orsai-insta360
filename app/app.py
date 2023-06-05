@@ -230,7 +230,7 @@ def get_number():
     print('AAAAAAAA', button[:4], idx)
     
     if button[:4] == 'save':
-        # pan_esc[idx], tilt_esc[idx] = get_camera()
+        pan_esc[idx], tilt_esc[idx] = get_camera()
         print('Escene ', idx+1, 'saved!!')
     elif button[:4] == 'load':
         move_camera(pan_esc[idx], tilt_esc[idx])    
