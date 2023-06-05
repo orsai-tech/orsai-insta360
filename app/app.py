@@ -224,19 +224,18 @@ def load_scene2():
 @app.route('/get_number', methods=['POST'])
 def get_number():
     button = request.form.get('button')
-    number = None
-    
     global pan_esc, tilt_esc
     
-    if button == 'button1':
-        number = 42  # Example number for button 1
-        pan_esc[0], tilt_esc[0] = get_camera()
-        print('SAVED NEW')
-    elif button == 'button2':
-        number = 99  # Example number for button 2
-        move_camera(pan_esc[0], tilt_esc[0])
+    idx = int(button[-1])-1
+    print('AAAAAAAA', button[:4], idx)
     
-    return jsonify({'number': number})
+    if button[:4] == 'save':
+        # pan_esc[idx], tilt_esc[idx] = get_camera()
+        print('Escene ', idx+1, 'saved!!')
+    elif button[:4] == 'load':
+        move_camera(pan_esc[idx], tilt_esc[idx])    
+        print('Escene ', idx+1 , 'loaded!!')    
+    return jsonify(success=True)
 
 
 
