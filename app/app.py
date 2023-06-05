@@ -221,8 +221,8 @@ def load_scene2():
     return jsonify(success=True)
 
 #Prueba para usar solo 1 funcion
-@app.route('/get_number', methods=['POST'])
-def get_number():
+@app.route('/scenes', methods=['POST'])
+def scenes():
     button = request.form.get('button')
     global pan_esc, tilt_esc
     
@@ -230,11 +230,13 @@ def get_number():
     print('AAAAAAAA', button[:4], idx)
     
     if button[:4] == 'save':
+        print('Escene ', idx+1, 'saved!!') 
         pan_esc[idx], tilt_esc[idx] = get_camera()
-        print('Escene ', idx+1, 'saved!!')
+
     elif button[:4] == 'load':
+        print('Escene ', idx+1 , 'loaded!!')         
         move_camera(pan_esc[idx], tilt_esc[idx])    
-        print('Escene ', idx+1 , 'loaded!!')    
+   
     return jsonify(success=True)
 
 

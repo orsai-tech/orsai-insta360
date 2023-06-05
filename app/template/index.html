@@ -52,18 +52,8 @@
                 Posición vertical: {{tilt_abs}}
             </div>
             <div id="slider"></div>
-
-            <h1>Escenas guardadas</h1>
-
-            <button id="Escena1">Escena 1</button>
-            <button id="Save1">Guardar 1</button>
             
-            <h1></h1>
-            
-            <button id="Escena2">Escena 2</button>
-            <button id="Save2">Guardar 2</button>
-            
-            <!-- Pruebaa evitar 1 funcion por boton -->
+            <!-- Botones de escenas -->
             <h1>Button Numbers Example</h1>
             <button class="button" value="save1">Save 1</button>
             <button class="button" value="load1">Load 1</button>
@@ -92,7 +82,7 @@
             var buttonValue = $(this).val();
             
             $.ajax({
-              url: '/get_number',
+              url: '/scenes',
               type: 'POST',
               data: {button: buttonValue},
               success: function(response) {
