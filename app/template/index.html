@@ -63,6 +63,13 @@
             <button id="Escena2">Escena 2</button>
             <button id="Save2">Guardar 2</button>
             
+            <!-- Pruebaa evitar 1 funcion por boton -->
+            <h1>Button Numbers Example</h1>
+            <button class="button" value="button1">Button 1 (save)</button>
+            <button class="button" value="button2">Button 2 (load)</button>
+            
+            <div id="result"></div>
+
         </div>
     </div>
 
@@ -74,12 +81,31 @@
         <p>DESARROLLADO POR ORSAI + MECANTRONIC</p>
     </footer>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+          $('.button').on('click', function(e) {
+            e.preventDefault();
+            
+            var buttonValue = $(this).val();
+            
+            $.ajax({
+              url: '/get_number',
+              type: 'POST',
+              data: {button: buttonValue},
+              success: function(response) {
+                $('#result').text('Result: ' + response.number);
+              }
+            });
+          });
+        });
+      </script>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.7.0/nouislider.min.js"></script>
     <script src="{{ url_for('static', filename='joystick.js') }}"></script> 
 </body>
 </html>
-
-
 
 
 

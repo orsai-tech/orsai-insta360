@@ -7,6 +7,8 @@ app = Flask(__name__, template_folder='template', static_folder='static')
 sensibility = 10
 pan_abs = 0
 tilt_abs = 0
+pan_esc = [0,0,0,0,0,0,0,0,0,0]
+tilt_esc = [0,0,0,0,0,0,0,0,0,0]
 dropdown_options = ["Option 12", "Option 2", "Option 3"]
 
 @app.route("/")
@@ -217,6 +219,26 @@ def load_scene2():
     print('Scene 2 loaded!')
 
     return jsonify(success=True)
+
+#Prueba para usar solo 1 funcion
+@app.route('/get_number', methods=['POST'])
+def get_number():
+    button = request.form.get('button')
+    number = None
+    
+    global pan_esc, tilt_esc
+    
+    if button == 'button1':
+        number = 42  # Example number for button 1
+        pan_esc[0], tilt_esc[0] = get_camera()
+        print('SAVED NEW')
+    elif button == 'button2':
+        number = 99  # Example number for button 2
+        move_camera(pan_esc[0], tilt_esc[0])
+    
+    return jsonify({'number': number})
+
+
 
 if __name__ == '__main__':
     """
