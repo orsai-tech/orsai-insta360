@@ -236,6 +236,7 @@ $(document).ready(function() {
         }
         drawJoystick();
         sendJoystickPosition();
+        
     }
 
     // Función para restablecer la posición del joystick al centro del canvas

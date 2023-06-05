@@ -9,6 +9,7 @@ pan_abs = 0
 tilt_abs = 0
 pan_esc = [0,0,0,0,0,0,0,0,0,0]
 tilt_esc = [0,0,0,0,0,0,0,0,0,0]
+limit = 0
 dropdown_options = ["Option 12", "Option 2", "Option 3"]
 
 @app.route("/")
@@ -48,7 +49,7 @@ def update():
     move_pan  = (x - 110)/60 * sensibility * 3600
     move_tilt = -1* (y - 110)/60 * sensibility * 3600
     
-    global pan_abs, tilt_abs
+    global pan_abs, tilt_abs, limit
     pan_abs, tilt_abs = get_camera()
     
     
@@ -61,8 +62,8 @@ def update():
     elif tilt_abs < -600000:
         tilt_abs = -600000 - tilt_abs
     
-    move_camera(pan_abs + move_pan, tilt_abs + move_tilt)
-    
+        move_camera(pan_abs + move_pan, tilt_abs + move_tilt)
+
     return jsonify(success=True)
 
 @app.route('/button_click', methods=['POST'])
