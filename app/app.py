@@ -62,7 +62,7 @@ def update():
     elif tilt_abs < -600000:
         tilt_abs = -600000 - tilt_abs
     
-        move_camera(pan_abs + move_pan, tilt_abs + move_tilt)
+    move_camera(pan_abs + move_pan, tilt_abs + move_tilt)
 
     return jsonify(success=True)
 
@@ -228,7 +228,6 @@ def scenes():
     global pan_esc, tilt_esc
     
     idx = int(button[-1])-1
-    print('AAAAAAAA', button[:4], idx)
     
     if button[:4] == 'save':
         print('Escene ', idx+1, 'saved!!') 
@@ -240,6 +239,10 @@ def scenes():
    
     return jsonify(success=True)
 
+@app.route('/get_positions')
+def get_positions():
+    positions = [pan_abs/3600, tilt_abs/3600]  # Generate your numbers dynamically
+    return jsonify({'positions': positions})
 
 
 if __name__ == '__main__':

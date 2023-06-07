@@ -30,6 +30,7 @@ $(document).ready(function() {
         event.preventDefault();
         isJoystickMoving = true;
         updateJoystickPosition(event);
+        updatePositions();
         }
 
     // Función para detener el movimiento del joystick
@@ -37,6 +38,7 @@ $(document).ready(function() {
         event.preventDefault();
         isJoystickMoving = false;
         resetJoystickPosition();
+        updatePositions();
         }
 
     // Función para actualizar la posición del joystick
@@ -44,6 +46,7 @@ $(document).ready(function() {
         event.preventDefault();
         if (isJoystickMoving) {
             updateJoystickPosition(event);
+            updatePositions();
         }
     }
 
@@ -236,7 +239,7 @@ $(document).ready(function() {
         }
         drawJoystick();
         sendJoystickPosition();
-        
+
     }
 
     // Función para restablecer la posición del joystick al centro del canvas
@@ -268,6 +271,39 @@ $(document).ready(function() {
         });
     }
     
+    function updatePositions() {
+        $.getJSON('/get_positions', function(data) {
+            var positions = data.positions;
+            var position1 = positions[0];
+            var position2 = positions[1];
+
+            $('#pan_absolute').text(position1);
+            $('#tilt_absolute').text(position2);
+        });
+    }
+
+
+    // Call the updateNumbers function initially
+    $(document).ready(function() {
+        updatePositions();
+    });
+
+    $(document).ready(function() {
+        $('.button').on('click', function(e) {
+          e.preventDefault();
+          var buttonValue = $(this).val();
+        
+          $.ajax({
+            url: '/scenes',
+            type: 'POST',
+            data: {button: buttonValue},
+            success: function(response) {
+              $('#result').text('Result: ' + response.number);
+            }
+          });
+        });
+      });
+
     // Llama a la función sendJoystickPosition repetidamente para actualizar la posición del joystick en el servidor cada 100ms
     setInterval(sendJoystickPosition, 5000);
     
