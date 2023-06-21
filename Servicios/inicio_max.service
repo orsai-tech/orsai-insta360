@@ -1,0 +1,12 @@
+[Unit]
+Description=Servicio que maximiza la ventana de la camara
+After=multi-user.service
+
+[Service]
+Environment=/home/camara/.Xauthority
+User=camara
+ExecStart=/bin/bash /home/camara/Kiosko/xterm_max.sh
+Restart=always
+
+[Install]
+WantedBy=default.target

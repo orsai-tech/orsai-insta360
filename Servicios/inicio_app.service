@@ -1,0 +1,9 @@
+[Unit]
+Description=Servicio que ejecuta el archivo main (app.py) del joystick.
+After=inicio_kiosko.service
+
+[Service]
+ExecStart=/usr/bin/python3 /home/camara/orsai-insta360/app/app.py
+
+[Install]
+WantedBy=default.target
