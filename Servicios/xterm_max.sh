@@ -1,0 +1,1 @@
+DISPLAY=:0 xterm -e '/bin/bash /home/camara/Kiosko/kiosk_max.sh'

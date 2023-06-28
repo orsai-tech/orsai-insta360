@@ -1,0 +1,1 @@
+DISPLAY=:0 xdotool search --onlyvisible --name "/dev/video0" windowsize 100% 100% && xrandr --output HDMI-1 --auto
